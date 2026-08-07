@@ -9,6 +9,39 @@ A primary use case is converting scanned line art, such as cartoons or handwritt
 
 The highpass filter in  Mkbitmap is a powerful feature designed to ensure foreground features like lines and text are preserved while compensating for uneven backgrounds.
 
+# Usage
+```php
+include('Potrace.php');
+
+$pot = new POtracePHP();
+
+$pot->setParameter([
+	'turnpolicy' => "minority",
+	'alphamax' => 1, ///default 1, range 0.0 to 1.33
+	'opttolerance' => 0.2, //default 0.2, range 0.0 to 4.0
+	'flat' => true,
+	//'group' => true,
+	'turdsize' => 0, //default 2
+	'coord' => 'relative', //relative or absolute
+	//'stroke' => true, // false will fill the close paths with 'fillcolor'
+	//'width' => 400,
+	//'height' => 400 , //width and height of SVG
+	//'margins' => array('left' => 50, 'right' => 50, 'top' => 50, 'bottom' => 50),
+	'bg' => true, //adds a fillable box <rect> as BG.
+	'unit' => 10, //default 10 (Potrace default is 10)
+	'fillcolor' => '#ffffff', //fill color
+	'linecolor' => '#000000' //sets line color.
+]); 
+ 
+$pot->loadImageFromFile('art.jpg', 128);
+ 
+$pot->process();
+
+$svg = $pot->getSVG(1);
+$pdf = $pot->getPDF(1);
+$eps = $pot->getEPS(1);
+```
+
 # Purpose: 
 It’s specifically used to “flatten” an image, making it easier to trace by removing gradients or shadows that can confuse the thresholding process, which is the step that actually converts the image to black and white.
 
